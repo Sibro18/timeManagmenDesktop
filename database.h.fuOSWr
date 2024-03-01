@@ -1,0 +1,37 @@
+#ifndef DATABASE_H
+#define DATABASE_H
+#include <QApplication>
+#include <QtSql/QSqlDatabase>
+#include <QDebug>
+#include <QtSql/QSqlQuery>
+#include <QTextEdit>
+#include <QDateTime>
+
+class dataBase
+{
+private:
+    QSqlDatabase sdb = QSqlDatabase::addDatabase("QSQLITE");
+    void insert(QSqlDatabase& sdb, QDateTime start, QDateTime deadLine, short int status);
+    void removeData(QSqlDatabase& sdb, int id);
+public:
+
+    dataBase() {
+
+        sdb.setDatabaseName("task_manger.db");
+        if(!sdb.open()){
+            qDebug() << "Что-то не так с соединением!";
+        }
+    }
+    ~dataBase(){
+       sdb.close();
+    }
+    void addFunc(QDateTime start, QDateTime deadLine, short int status){
+        insert(sdb,start,deadLine,status);
+    }
+    void removeFunc(int id){
+        removeData(sdb, id);
+    }
+
+};
+
+#endif // DATABASE_H
